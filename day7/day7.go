@@ -7,14 +7,14 @@ import (
 	"strings"
 )
 
-func isValid(test string, eq []string, idx, sum int) bool {
+func isValid(test string, eq []string, idx int, sum string) bool {
 	if idx == len(eq) {
-		chk, err := strconv.Atoi(test)
-		if err != nil {
-			fmt.Println(err)
-		}
+		// chk, err := strconv.Atoi(test)
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
 
-		if sum == chk {
+		if sum == test {
 			return true
 		}
 		return false
@@ -26,10 +26,18 @@ func isValid(test string, eq []string, idx, sum int) bool {
 	if err != nil {
 		fmt.Println(err)
 	}
-	take_sum := isValid(test, eq, idx+1, sum+el)
-	take_mul := isValid(test, eq, idx+1, sum*el)
 
-	return leave || take_sum || take_mul
+	temp_sum, err := strconv.Atoi(sum)
+	if err != nil {
+		fmt.Println(sum)
+		fmt.Println(err, "here")
+	}
+
+	take_sum := isValid(test, eq, idx+1, strconv.Itoa(temp_sum+el))
+	take_mul := isValid(test, eq, idx+1, strconv.Itoa(temp_sum*el))
+	take_conc := isValid(test, eq, idx+1, sum+eq[idx])
+
+	return leave || take_sum || take_mul || take_conc
 }
 
 func main() {
@@ -48,20 +56,26 @@ func main() {
 		equations = append(equations, strings.Split(strings.Trim(arr[1], " "), " "))
 	}
 
-	sum_part1 := 0
+	sum := 0
 	for i, eq := range equations {
-		start, err := strconv.Atoi(eq[0])
-		if err != nil {
-			fmt.Println(err)
-		}
-		if isValid(test[i], eq, 1, start) {
+
+		// --- part 1 --
+
+		// start, err := strconv.Atoi(eq[0])
+		// if err != nil {
+		// 	fmt.Println(err)
+		// }
+
+		// --- part 1 end ---
+
+		if isValid(test[i], eq, 1, eq[0]) {
 			n, err := strconv.Atoi(test[i])
 			if err != nil {
 				fmt.Println(err)
 			}
-			sum_part1 += n
+			sum += n
 		}
 	}
 
-	fmt.Println(sum_part1)
+	fmt.Println(sum)
 }
