@@ -22,10 +22,10 @@ func findAntinodes(key rune, coords [][]int, field []string, set map[interface{}
 	count := 0
 	for i := 0; i < len(coords); i++ {
 		for j := i + 1; j < len(coords); j++ {
-			target := euclidean(coords[i][0], coords[i][1], coords[j][0], coords[j][1])
+			// target := euclidean(coords[i][0], coords[i][1], coords[j][0], coords[j][1])
 			slope1 := calcSlope(coords[i][0], coords[i][1], coords[j][0], coords[j][1])
 			// slope2 := math.Abs(slope1)
-			// fmt.Println(coords[i], coords[j], target, slope1, slope2)
+			// fmt.Println(coords[i], coords[j], target, slope1)
 
 			t := 0
 			for r, row := range field {
@@ -35,12 +35,12 @@ func findAntinodes(key rune, coords [][]int, field []string, set map[interface{}
 					// 	// 	fmt.Println(string(key), r, c, coords[i][0], coords[i][1], coords[j][0], coords[j][1], "slope: ", calcSlope(r, c, coords[i][0], coords[i][1]), slope1)
 					// 	fmt.Println(r, c)
 					// }
-					if field[r][c] == '#' || (r == coords[i][0] && c == coords[i][1]) || (r == coords[j][0] && c == coords[j][1]) {
-						continue
-					}
+					// if field[r][c] == '#' || (r == coords[i][0] && c == coords[i][1]) || (r == coords[j][0] && c == coords[j][1]) {
+					// 	continue
+					// }
 					k := strconv.Itoa(r) + "#" + strconv.Itoa(c)
 
-					if (((calcSlope(r, c, coords[i][0], coords[i][1]) == slope1) && euclidean(coords[i][0], coords[i][1], r, c) == target) || ((calcSlope(coords[j][0], coords[j][1], r, c) == slope1) && euclidean(coords[j][0], coords[j][1], r, c) == target)) && !set[k] {
+					if ((calcSlope(r, c, coords[i][0], coords[i][1]) == slope1) || (calcSlope(coords[i][0], coords[i][1], r, c) == slope1) || (calcSlope(r, c, coords[j][0], coords[j][1]) == slope1) || (calcSlope(coords[j][0], coords[j][1], r, c) == slope1)) && !set[k] {
 						t++
 						set[k] = true
 						// fmt.Println("slope1", r, c)
@@ -49,13 +49,13 @@ func findAntinodes(key rune, coords [][]int, field []string, set map[interface{}
 					// if (((calcSlope(r, c, coords[i][0], coords[i][1]) == slope2) && euclidean(coords[i][0], coords[i][1], r, c) == target) || ((calcSlope(coords[j][0], coords[j][1], r, c) == slope2) && euclidean(coords[j][0], coords[j][1], r, c) == target)) && !set[k] {
 					// 	t++
 					// 	set[k] = true
-					// 	fmt.Println("slope2", r, c)
+					// 	// fmt.Println("slope2", r, c)
 					// }
 				}
 
-				if t == 2 {
-					break
-				}
+				// if t == 2 {
+				// 	break
+				// }
 			}
 			count += t
 		}
@@ -90,6 +90,15 @@ func main() {
 	// fmt.Println(mp)
 	set := make(map[interface{}]bool)
 	count := 0
+	for r, row := range input {
+		for c, _ := range row {
+			k := strconv.Itoa(r) + "#" + strconv.Itoa(c)
+			if input[r][c] != '.' {
+				count++
+				set[k] = true
+			}
+		}
+	}
 	for key, val := range mp {
 		n := findAntinodes(key, val, input, set)
 		count += n
