@@ -119,20 +119,8 @@ func clear_sides(up, down, left, right [][]int) {
 	for r, row := range up {
 		for c, _ := range row {
 			up[r][c] = 0
-		}
-	}
-	for r, row := range up {
-		for c, _ := range row {
 			down[r][c] = 0
-		}
-	}
-	for r, row := range up {
-		for c, _ := range row {
 			left[r][c] = 0
-		}
-	}
-	for r, row := range up {
-		for c, _ := range row {
 			right[r][c] = 0
 		}
 	}
